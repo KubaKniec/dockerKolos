@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  db:
+    image: my-db
+    environment:
+      MYSQL_ROOT_PASSWORD: my-secret-pw
+    volumes:
+      - db_data:/var/lib/mysql
+
+  rest-api:
+    build: ./rest-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  console-app:
+    build: ./console-app
+    environment:
+      MESSAGE: "Hello from Docker!"
+    depends_on:
+      - rest-api
+
+volumes:
+  db_data:
